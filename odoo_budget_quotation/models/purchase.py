@@ -20,3 +20,10 @@ class PurchaseOrderLine(models.Model):
                 line_name = str(formated_amount) +' ('+ line.order_id.partner_id.name + ')'
                 result.append((line.id, line_name))
         return result
+
+    @api.model
+    def _search(self, args, offset=0, limit=None, order=None, count=False, access_rights_uid=None):
+        if self._context.get('order_display_bdgt'):
+            ctx = self._context.copy()
+            order = ctx['order_display_bdgt']
+        return super(PurchaseOrderLine, self)._search(args=args, offset=offset, limit=limit, order=order, count=count, access_rights_uid=access_rights_uid)

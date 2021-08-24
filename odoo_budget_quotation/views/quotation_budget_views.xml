@@ -19,9 +19,14 @@
                     <sheet>
                         <div class="oe_button_box" name="button_box">
                             <button name="action_view_budget_quotations" type="object" class="oe_stat_button" icon="fa-usd icon">
-                                <div class="o_field_widget o_stat_info">
-                                    <span class="o_stat_text">Quotations</span>
-                                </div>
+<!--                                <div class="o_field_widget o_stat_info">-->
+                                    <field name="quotation_count" widget="statinfo" string="Quotations"/>
+<!--                                </div>-->
+                            </button>
+                            <button name="action_view_purchase_agreement" type="object" class="oe_stat_button" icon="fa-list">
+<!--                                <div class="o_field_widget o_stat_info">-->
+                                    <span class="o_stat_text">Purchase Agreement</span>
+<!--                                </div>-->
                             </button>
                             <field name="invoice_count" widget="statinfo" string="Invoices" invisible="1"/>
                         </div>
@@ -80,7 +85,7 @@
                                     widget="section_and_note_one2many"
                                     mode="tree,kanban"
                                     attrs="{'readonly': [('state', 'in', ('done','cancel'))]}"
-                                    context="{'default_discount': discount_cost_term, 'default_utility': utility_cost_term}"
+                                    context="{'default_discount': discount_cost_term, 'default_utility': utility_cost_term, 'quotation_budget_po_line': True}"
                                 >
                                     <form>
                                         <field name="display_type" invisible="1"/>
@@ -235,10 +240,10 @@
                                             }"
                                         />
 
-                                        <field name="budget_rfq_line_id" domain="[('budget_order_line_id', '=', id), ('product_id', '=', product_id)]" options="{'no_open': True, 'no_create_edit': True, 'no_create': True}" context="{'quotation_budget_po_line': True}"/>
+                                        <field name="budget_rfq_line_id" domain="[('budget_order_line_id', '=', id), ('product_id', '=', product_id)]" options="{'no_open': True, 'no_create_edit': True, 'no_create': True}" context="{'quotation_budget_po_line': True, 'order_display_bdgt':'price_unit'}"/>
                                         <field name="po_line_cost"/>
                                         <field name="so_customer_cost"/>
-                                        <field name="discount" string="Disc.%" groups="product.group_discount_per_so_line" optional="show" widget="product_discount"/>
+                                        <field name="discount" string="Disc.%" optional="show" widget="product_discount"/>
                                         <field name="price_after_discount"/>
                                         <field name="landed_cost"/>
                                         <field name="cost_for_quotation"/>

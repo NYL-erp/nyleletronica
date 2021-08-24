@@ -43,6 +43,15 @@ class Budget(models.Model):
         ('cancel', 'Cancelled'),],
         default='draft',readonly=True, copy=False, index=True, tracking=3
     )
+    quotation_count = fields.Integer(
+        'Quotations',
+        compute='_compute_quotation_count',
+        readonly=True
+    )
+
+    def _compute_quotation_count(self):
+        for rec in self:
+            rec.quotation_count = self.env['sale.order'].search_count([('quotation_budget_id', '=', self.id)])
     
     @api.onchange('partner_id')
     def _onchange_partner_id_cost_term(self):
@@ -136,11 +145,28 @@ class Budget(models.Model):
             raise ValidationError('There is no any budget Lines to add in Quotations.')
 
         so_line_id = self.env['sale.order.line'].create(so_line_vals)
-        return sale_order
+        action = self.env["ir.actions.actions"]._for_xml_id("sale.action_quotations_with_onboarding")
+        form_view = [(self.env.ref('sale.view_order_form').id, 'form')]
+        if 'views' in action:
+            action['views'] = form_view + [(state,view) for state,view in action['views'] if view != 'form']
+        else:
+            action['views'] = form_view
+        action['res_id'] = sale_order.id
+        return action
     
     def action_view_budget_quotations(self):
         action = self.env["ir.actions.actions"]._for_xml_id("sale.action_quotations_with_onboarding")
         action['domain'] = [('quotation_budget_id', '=', self.id)]
+        return action
+    
+    def action_view_purchase_agreement(self):
+        action = self.env["ir.actions.actions"]._for_xml_id("purchase_requisition.action_purchase_requisition")
+        form_view = [(self.env.ref('purchase_requisition.view_purchase_requisition_form').id, 'form')]
+        if 'views' in action:
+            action['views'] = form_view + [(state,view) for state,view in action['views'] if view != 'form']
+        else:
+            action['views'] = form_view
+        action['res_id'] = self.purchase_agreement_prsit_id.id
         return action
 
     def action_budget_cancel(self):
@@ -159,6 +185,7 @@ class SaleOrderLine(models.Model):
     budget_rfq_line_id = fields.Many2one(
         'purchase.order.line',
         copy=False,
+        order='price_unit',
     )
     po_line_cost = fields.Float(
         'Cost',
@@ -189,6 +216,19 @@ class SaleOrderLine(models.Model):
         store=True,
         copy=True,
     )
+
+    @api.onchange('product_uom', 'product_uom_qty')
+    def product_uom_change(self):
+        if self._context.get('quotation_budget_po_line'):
+            return
+        return super(SaleOrderLine, self).product_uom_change()
+        
+    
+    @api.onchange('product_id', 'price_unit', 'product_uom', 'product_uom_qty', 'tax_id')
+    def _onchange_discount(self):
+        if self._context.get('quotation_budget_po_line'):
+            return
+        return super(SaleOrderLine, self)._onchange_discount()
 
     @api.onchange('budget_rfq_line_id')
     def _onchange_budget_rfq_line(self):
