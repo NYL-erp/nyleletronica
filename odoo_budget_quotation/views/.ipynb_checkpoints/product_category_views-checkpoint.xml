@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="product_category_form_view_inherit_cost_term" model="ir.ui.view">
+            <field name="name">product.category.form.inherit_cost_term</field>
+            <field name="model">product.category</field>
+            <field name="inherit_id" ref="product.product_category_form_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="//group[@name='first']" position="after">
+                    <group>
+                        <field name="category_suplier_ids" widget="many2many_tags"/>
+                    </group>
+                    <group string='Cost Terms'>
+                        <field name="import_cost_term"/>
+                        <field name="discount_cost_term"/>
+                        <field name="utility_cost_term"/>
+                        <field name="factor_cost_term"/>
+                    </group>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

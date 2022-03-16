@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_order_form_inherit_budget_quotation" model="ir.ui.view">
+            <field name="name">sale.order.form.inherit.budget.quotation</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//div[@name='button_box']" position="inside">
+                    <button name="action_view_quotation_budget" type="object" class="oe_stat_button" icon="fa-usd icon" attrs="{'invisible': [('quotation_budget_id', '=', False)]}">
+                        <div class="o_field_widget o_stat_info">
+                            <span class="o_stat_text">Budget</span>
+                        </div>
+                    </button>
+                </xpath>
+                <xpath expr="//field[@name='payment_term_id']" position="after">
+                    <field name="quotation_budget_id" readonly="1"/>
+                </xpath>
+                <xpath expr="//field[@name='order_line']//tree/field[@name='price_unit']" position="before">
+                    <field name="cost_for_quotation" attrs="{'column_invisible': [('parent.quotation_budget_id', '=', False)]}" invisible="1"/>
+                    <field name="po_line_cost" invisible="1"/>
+                    <field name="so_customer_cost" invisible="1"/>
+                    <field name="price_after_discount" invisible="1"/>
+                    <field name="landed_cost" invisible="1"/>
+                    <field name="utility" invisible="1"/>
+                    <field name="budget_quot_unit_price" invisible="1"/>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

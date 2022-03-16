@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        
+        <record id="quotation_budget_form_inherit" model="ir.ui.view">
+            <field name="name">quotation.budget.form</field>
+            <field name="model">quotation.budget</field>
+            <field name="inherit_id" ref="odoo_budget_quotation.quotation_budget_form_view" />
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='payment_term_id']" position="after">
+                    <field name="crm_lead_id" attrs="{'invisible': [('crm_lead_id', '=', False)]}" readonly="1"/>
+                </xpath>
+            </field>
+        </record>
+        
+    </data>
+</odoo>

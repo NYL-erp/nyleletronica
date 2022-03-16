@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        
+        <record id="view_purchase_requisition_form_inherit" model="ir.ui.view">
+            <field name="name">purchase.requisition.form</field>
+            <field name="model">purchase.requisition</field>
+            <field name="inherit_id" ref="purchase_requisition.view_purchase_requisition_form" />
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='company_id']" position="after">
+                    <field name="crm_lead_id" attrs="{'invisible': [('crm_lead_id', '=', False)]}" readonly="1"/>
+                </xpath>
+                <xpath expr="//button[@name='action_in_progress']" position="after">
+                    <button name="action_generate_purchase_orders" states="ongoing,in_progress,open,done" string="Generar Presupuestos" type="object" class="btn-primary"/>
+                </xpath>
+            </field>
+        </record>
+        
+    </data>
+</odoo>

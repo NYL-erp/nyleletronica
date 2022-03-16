@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        
+        <record id="view_purchase_requisition_generate_po_wizard" model="ir.ui.view">
+            <field name="name">wizard.purchase.requisition.generate.po.wizard</field>
+            <field name="model">wizard.purchase.requisition.generate.po</field>
+            <field name="arch" type="xml">
+                 <form string="Proveedores">
+                    <group string="Proveedores">
+                        <field name="partner_ids"/>
+                        <field name="requisition_line_ids" readonly="1" string="">
+                            <tree create="false" delete="false">
+                                <field name="product_id"/>
+                                <field name="product_qty"/>
+                                <field name="unit_price"/>
+                            </tree>
+                            <form>
+                                <script>
+                                    $(document).ready(function(){
+                                    $(".btn-primary").hide();
+                                    $(".btn-primary").hide();
+                                    $("#purchase_requisition_line_create_po").show();
+                                    });
+                                </script>
+                                <group>
+                                    <group>
+                                        <field name="product_id" readonly="1"/>
+                                        <field name="product_qty" readonly="1"/>
+                                        <field name="unit_price" readonly="1"/>
+                                    </group>
+                                </group>
+                            </form>
+                        </field>
+                    </group>
+                    <footer>
+                        <button id="purchase_requisition_generate_create_po" 
+                                name="purchase_requisition_generate_create_po" 
+                                string="Generar Presupuestos" 
+                                type="object" 
+                                class="oe_highlight"/>
+                        <button string="Cancel" class="btn btn-danger" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+       
+       <record id="action_purchase_requisition_generate_po_wizard" model="ir.actions.act_window">
+            <field name="name">Generar Presupuestos</field>
+            <!--<field name="type">ir.actions.act_window</field>-->
+            <field name="res_model">wizard.purchase.requisition.generate.po</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="odoo_crm_lead_budget.view_purchase_requisition_generate_po_wizard"/>
+            <field name="binding_model_id" ref="model_purchase_requisition"/>
+            <field name="target">new</field>
+        </record>
+       
+    
+    </data>
+</odoo>

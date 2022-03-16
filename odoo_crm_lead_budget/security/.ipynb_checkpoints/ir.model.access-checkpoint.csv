@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_wizard_purchase_requisition_generate_po,access.wizard.purchase.requisition.generate.po,model_wizard_purchase_requisition_generate_po,sales_team.group_sale_manager,1,1,1,1
+access_wizard_purchase_requisition_generate_po_line,access.wizard.purchase.requisition.generate.po.line,model_wizard_purchase_requisition_generate_po_line,sales_team.group_sale_manager,1,1,1,1

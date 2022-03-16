@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        
+        <record id="crm_lead_view_form_inherit" model="ir.ui.view">
+            <field name="name">crm.lead.oppor.inherited.crm.inherit</field>
+            <field name="model">crm.lead</field>
+            <field name="inherit_id" ref="sale_crm.crm_case_form_view_oppor" />
+            <field name="arch" type="xml">
+                <xpath expr="//button[@name='action_view_sale_quotation']" position="replace">
+                    <button class="oe_stat_button" type="object"
+                        name="action_view_sale_quotation" icon="fa-pencil-square-o" invisible="1">
+                        <field name="quotation_count" widget="statinfo" string="Quotations"/>
+                    </button>
+                </xpath>
+            </field>
+        </record>
+        
+        <record id="crm_case_form_view_oppor_inherit" model="ir.ui.view">
+            <field name="name">crm.lead.inherit</field>
+            <field name="model">crm.lead</field>
+            <field name="inherit_id" ref="sale_crm.crm_case_form_view_oppor" />
+            <field name="arch" type="xml">
+                <xpath expr="//div[@name='button_box']" position="inside">
+                     <button name="action_view_crm_lead_budget" type="object" class="oe_stat_button" icon="fa-list">
+                            <field name="budget_count" widget="statinfo" string="Presupuestos"/>
+                    </button>
+                </xpath>
+            </field>
+        </record>
+        
+         <record id="quotation_budget_tree_view" model="ir.ui.view">
+            <field name="name">quotation.budget.tree</field>
+            <field name="model">quotation.budget</field>
+            <field name="mode">primary</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="name"/>
+                    <field name="create_date"/>
+                    <field name="partner_id"/>
+                    <field name="user_id"/>
+                    <field name="activity_ids"/>
+                    <field name="amount_total"/>
+                    <field name="state"/>
+                </tree>    
+            </field>
+        </record>
+        
+        
+    </data>
+</odoo>
